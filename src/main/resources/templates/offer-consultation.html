@@ -1,0 +1,124 @@
+<!-- offer-consultation.html -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>User Dashboard</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- Specific Menu for User Dashboard -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">NavCar</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/offer-consultation">Consult Offers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Add Request</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/logout}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container mt-4">
+  <h1 class="text-center">Available Shuttle Offers</h1>
+  <p class="text-center">Consult the available shuttle offers below and subscribe to your preferred ones.</p>
+
+  <!-- Table to display available shuttle offers -->
+  <table class="table table-bordered">
+    <thead class="thead-light">
+    <tr>
+      <th scope="col">Departure City</th>
+      <th scope="col">Arrival City</th>
+      <th scope="col">Start Date</th>
+      <th scope="col">End Date</th>
+      <th scope="col">Available Seats</th>
+      <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody id="offersTable">
+    <!-- Offers will be populated here by JavaScript -->
+    </tbody>
+  </table>
+</main>
+
+<footer class="bg-light text-center py-3">
+  <p>&copy; 2025 Transport Company</p>
+</footer>
+
+<!-- Add Bootstrap and jQuery for handling dynamic behavior -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Function to fetch available shuttle offers from the backend
+  function fetchAvailableOffers() {
+    fetch('/offers/available') // GET request to the backend
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json(); // Parse JSON response
+            })
+            .then(offers => {
+              const tableBody = document.getElementById('offersTable');
+              tableBody.innerHTML = '';  // Clear existing rows
+
+              if (offers.length === 0) {
+                const noOffersMessage = document.createElement('tr');
+                noOffersMessage.innerHTML = '<td colspan="6" class="text-center">No available offers at the moment.</td>';
+                tableBody.appendChild(noOffersMessage);
+                return;
+              }
+
+              // Iterate through the offers and create rows in the table
+              offers.forEach(offer => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                        <td>${offer.}</td>
+                        <td>${offer.departureCity}</td>
+                        <td>${offer.arrivalCity}</td>
+                        <td>${offer.startDate}</td>
+                        <td>${offer.endDate}</td>
+                        <td>${offer.maxSubscribers - offer.currentSubscribers}</td>
+                        <td><button class="btn btn-primary" onclick="subscribeToOffer(${offer.id})">Subscribe</button></td>
+                    `;
+                tableBody.appendChild(row);
+              });
+            })
+            .catch(error => {
+              console.error('Error fetching offers:', error);
+              alert('Failed to fetch available offers.');
+            });
+  }
+
+  // Function to handle subscribing to an offer
+  function subscribeToOffer(offerId) {
+    const subscriberName = prompt('Enter your name:');
+    const subscriberEmail = prompt('Enter your email:');
+
+    if (subscriberName && subscriberEmail) {
+      // POST request to subscribe to the offer
+      fetch(`/offers/${offerId}/subscribe?subscriberName=${subscriberName}&subscriberEmail=${subscriberEmail}`, {
+        method: 'POST',
+      })
+              .then(response => response.json())
+              .then(data => {
+                alert(data.message);  // Show the response message (success or failure)
+              })
+              .catch(error => {
+                console.error('Error subscribing to the offer:', error);
+                alert('Failed to subscribe to the offer.');
+              });
+    } else {
+      alert('Please provide both your name and email.');
+    }
+  }
+
+  // Fetch available offers when the page loads
+  window.onload = fetchAvailableOffers;
+</script>
+</body>
+</html>
