@@ -3,29 +3,144 @@
 <head>
     <title>Admin Company Dashboard</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #343a40 !important;
+        }
+
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+
+        .navbar-brand:hover, .nav-link:hover {
+            color: #f8f9fa !important;
+        }
+
+        /* Hero Section Styling */
+        .hero-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .dashboard-card {
+            background-color: rgba(255, 255, 255, 0.1); /* Transparent white */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-card h2, .dashboard-card p {
+            color: #fff;
+        }
+
+        /* Icon Container Styling */
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .icon-link {
+            text-decoration: none;
+            color: white;
+            text-align: center;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .icon-link:hover {
+            transform: scale(1.1);
+            color: #ddd;
+        }
+
+        .icon {
+            font-size: 5rem;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+            margin-top: auto;
+        }
+    </style>
 </head>
 <body>
-<!-- Specific Menu for Admin Company Dashboard -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<!-- Responsive Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="#">NavCar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#">Add Offer</a>
+                <a class="nav-link" href="/company-add-offer">
+                    <i class="fas fa-plus-circle"></i> Add Offer
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Consult Requests</a>
+                <a class="nav-link" href="#">
+                    <i class="fas fa-list"></i> Consult Requests
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/logout}">Logout</a>
+                <a class="nav-link" th:href="@{/logout}">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             </li>
         </ul>
     </div>
 </nav>
 
-<div class="container mt-5">
-    <h1 class="text-center">Admin Company Dashboard</h1>
-    <p class="text-center">Welcome, <span th:text="${username}"></span>!</p>
+<!-- Dashboard Content -->
+<div class="container hero-section">
+    <div class="dashboard-card">
+        <h2>Admin Company Dashboard</h2>
+        <p>Welcome, <strong><span th:text="${username}"></span></strong>!</p>
+
+        <!-- Grand Icons Section -->
+        <div class="icon-container">
+            <a class="icon-link" href="/company-add-offer">
+                <i class="fas fa-plus-circle icon"></i>
+                <p>Add Offer</p>
+            </a>
+            <a class="icon-link" href="#">
+                <i class="fas fa-list icon"></i>
+                <p>Consult Requests</p>
+            </a>
+        </div>
+    </div>
 </div>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 NavCar</p>
+</footer>
+
+<!-- Bootstrap Scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

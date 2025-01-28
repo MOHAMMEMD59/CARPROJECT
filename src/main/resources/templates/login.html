@@ -3,39 +3,127 @@
 <head>
   <title>Login</title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+  <style>
+
+    body {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Arial', sans-serif;
+    }
+
+
+    .login-card {
+      max-width: 400px;
+      padding: 30px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.8); /* Transparent white */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+    .btn-primary {
+      background-color: #2575fc;
+      border-color: #2575fc;
+    }
+
+    .btn-primary:hover {
+      background-color: #6a11cb;
+      border-color: #6a11cb;
+    }
+
+    .navbar {
+      background-color: rgba(0, 0, 0, 0.6) !important;
+    }
+
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+
+    .navbar-brand {
+      color: white !important;
+    }
+
+    .navbar .nav-link {
+      color: white !important;
+    }
+
+    .navbar .nav-link:hover {
+      color: #ddd !important;
+    }
+  </style>
 </head>
 <body>
-<!-- Specific Menu for Login Page -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">NavCar</a>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <a class="navbar-brand font-weight-bold" href="#">NavCar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="nav-link" th:href="@{/register}">Register</a>
+        <a class="nav-link" th:href="@{/register}">
+          <i class="fas fa-user-plus"></i> Register
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" th:href="@{/login}">Login</a>
+        <a class="nav-link" th:href="@{/login}">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </a>
       </li>
     </ul>
   </div>
 </nav>
 
-<div class="container">
-  <h1 class="mt-5">Login</h1>
+
+<div class="login-card">
+  <h2 class="text-center mb-4">Login</h2>
   <form th:action="@{/login}" method="post">
     <div class="form-group">
-      <label for="username">Username:</label>
-      <input type="text" id="username" class="form-control" name="username" required>
+      <label for="username">Username</label>
+      <input type="text" id="username" class="form-control" name="username" placeholder="Enter your username" required>
     </div>
     <div class="form-group">
-      <label for="password">Password:</label>
-      <input type="password" id="password" class="form-control" name="password" required>
+      <label for="password">Password</label>
+      <input type="password" id="password" class="form-control" name="password" placeholder="Enter your password" required>
     </div>
     <div class="text-center">
-      <button type="submit" class="btn btn-primary">Login</button>
-      <p th:if="${error}" class="text-danger" th:text="${error}"></p>
+      <button type="submit" class="btn btn-primary btn-block">Login</button>
+      <p th:if="${error}" class="text-danger mt-3" th:text="${error}"></p>
     </div>
   </form>
+  <div class="text-center mt-3">
+    <a href="#" th:href="@{/forgot-password}">Forgot your password?</a>
+  </div>
 </div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

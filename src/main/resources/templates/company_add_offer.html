@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Add New Offer</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Global Styles */
+    body {
+      background: linear-gradient(to bottom right, #6a11cb, #2575fc);
+      color: #ffffff;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .navbar {
+      background-color: #343a40 !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand, .navbar .nav-link {
+      color: white !important;
+    }
+
+    .navbar .nav-link:hover {
+      color: #ddd !important;
+    }
+
+    .dashboard-card {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #ffffff;
+      color: #000000;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary {
+      border-radius: 25px;
+    }
+
+    footer {
+      color: #ffffff;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+<!-- Responsive Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light">
+  <a class="navbar-brand" href="#">NavCar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/company-add-offer"><i class="fas fa-plus-circle"></i> Add Offer</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="fas fa-search"></i> Consult Requests</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container mt-5">
+  <div class="dashboard-card">
+    <h2 class="text-center mb-4">Add New Shuttle Offer</h2>
+    <form th:action="@{/add-offer}" th:object="${navOffer}" method="post">
+      <!-- Company Info -->
+
+      <div class="form-group">
+        <label for="company">Company</label>
+        <select class="form-control" name="company" id="company" required>
+          <option value="" disabled selected>Select a company</option>
+          <option th:each="company : ${company}" th:value="${company.id}" th:text="${company.name}"></option>
+        </select>
+      </div>
+
+      <!-- Departure & Arrival Cities -->
+      <div class="form-group">
+        <label for="departureCity">Departure City</label>
+        <select class="form-control" id="departureCity" name="departureCity" required>
+          <option value="" disabled selected>Select a city</option>
+          <option th:each="city : ${cities}" th:value="${city.nameCity}" th:text="${city.nameCity}"></option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="arrivalCity">Arrival City</label>
+        <select class="form-control" id="arrivalCity" name="arrivalCity" required>
+          <option value="" disabled selected>Select a city</option>
+          <option th:each="city : ${cities}" th:value="${city.nameCity}" th:text="${city.nameCity}"></option>
+        </select>
+      </div>
+
+      <!-- Dates -->
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="startDate">Start Date</label>
+          <input type="date" class="form-control" id="startDate" name="startDate" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="endDate">End Date</label>
+          <input type="date" class="form-control" id="endDate" name="endDate" required>
+        </div>
+      </div>
+
+      <!-- Times -->
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="departureTime">Departure Time</label>
+          <input type="time" class="form-control" id="departureTime" name="departureTime" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="arrivalTime">Arrival Time</label>
+          <input type="time" class="form-control" id="arrivalTime" name="arrivalTime" required>
+        </div>
+      </div>
+
+      <!-- Max Subscribers & Vehicle Description -->
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="maxSubscribers">Max Subscribers</label>
+          <input type="number" class="form-control" id="maxSubscribers" name="maxSubscribers" min="1" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="vehicleDescription">Vehicle Description</label>
+          <textarea class="form-control" id="vehicleDescription" name="vehicleDescription" rows="3" required></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Add offer</button>
+
+      <!-- Submit Button -->
+<!--      <button type="submit" class="btn btn-primary btn-block" id="submitButton">-->
+<!--        <span id="submitText">Add Offer</span>-->
+<!--        <span id="loadingSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>-->
+<!--      </button>-->
+    </form>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="text-center py-3 mt-4">
+  <p>&copy; 2025 Transport Company</p>
+</footer>
+
+</body>
+</html>

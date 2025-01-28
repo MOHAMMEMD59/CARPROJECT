@@ -36,6 +36,8 @@ public class SubscriptionService {
 
                 // Increment the current subscribers count in the NavOffer
                 navOffer.incrementSubscribers();
+                //decrement available seats
+                navOffer.setAvailableSeats(navOffer.getAvailableSeats() - 1);
                 navOfferRepository.save(navOffer);
 
                 return true; // Subscription successful

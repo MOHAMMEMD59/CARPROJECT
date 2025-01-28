@@ -3,61 +3,58 @@ package com.mezzi.carsnav.Entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
 @Entity
 @Table(name = "nav_offer")
 public class NavOffer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Unique identifier for the shuttle offer
+    private Long id; //
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
-    private Company company; // Reference to the company creating the offer
+    private Company company;
 
-    @Column(nullable = false)
-    private String departureCity; // City of departure
+    @Column(nullable = false , name="departure_city")
+    private String departureCity;
 
-    @Column(nullable = false)
-    private String arrivalCity; // City of arrival
+    @Column(nullable = false , name ="arrival_city")
+    private String arrivalCity;
 
-    @Column(nullable = false)
-    private LocalDate startDate; // Start date of the subscription
+    @Column(nullable = false , name ="start_date")
+    private LocalDate startDate;
 
-    @Column(nullable = false)
-    private LocalDate endDate; // End date of the subscription
+    @Column(nullable = false , name ="end_date")
+    private LocalDate endDate;
 
-    @Column(nullable = false)
-    private LocalTime departureTime; // Departure time (time of day)
+    @Column(nullable = false , name ="departure_time")
+    private LocalTime departureTime;
 
-    @Column(nullable = false)
-    private LocalTime arrivalTime; // Arrival time (time of day)
+    @Column(nullable = false , name ="arrival_time")
+    private LocalTime arrivalTime;
 
-    @Column(nullable = false)
-    private int maxSubscribers; // Maximum number of subscribers
+    @Column(nullable = false , name ="max_subscribers")
+    private int maxSubscribers;
 
-    @Column(nullable = false)
-    private int availableSeats; // Available seats for subscription
+    @Column(nullable = false , name ="available_seats")
+    private int availableSeats;
 
-    @Column(length = 1000)
-    private String vehicleDescription; // Description of the vehicle (e.g., air conditioning, number of seats, etc.)
+    @Column(length = 1000 , name ="vehicle_description")
+    private String vehicleDescription;
+
+    @Column(nullable = false , name ="current_subscribers")
+    private int currentSubscribers = 0;
+
+    @Column(nullable = false, updatable = false , name ="created_at")
+    private LocalDate createdAt;
+
+    @Column(nullable = false , name ="updated_at")
+    private LocalDate updatedAt;
 
 
-    @Column(nullable = false)
-    private int currentSubscribers;
-
-
-    @Column(nullable = false, updatable = false)
-    private LocalDate createdAt; // Timestamp of when the offer was created
-
-    @Column(nullable = false)
-    private LocalDate updatedAt; // Timestamp of when the offer was last updated
-
-    // Constructor
     public NavOffer() {}
 
-    // Constructor with essential fields
+
     public NavOffer(Company company, String departureCity, String arrivalCity, LocalDate startDate, LocalDate endDate,
                     LocalTime departureTime, LocalTime arrivalTime, int maxSubscribers, int availableSeats, String vehicleDescription) {
         this.company = company;
@@ -72,28 +69,36 @@ public class NavOffer {
         this.vehicleDescription = vehicleDescription;
         this.createdAt = LocalDate.now();
         this.updatedAt = LocalDate.now();
+        this.currentSubscribers = 0; // Initialize to 0
     }
 
-    // Pre-persist method to set createdAt and default values
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDate.now();
         this.updatedAt = LocalDate.now();
     }
 
-    // Method to update available seats (e.g., after a user subscribes)
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDate.now();
+    }
+
+
     public void reduceAvailableSeats() {
         if (availableSeats > 0) {
             availableSeats--;
         }
     }
 
-    // Method to check if there are available seats
+
     public boolean hasAvailableSeats() {
         return availableSeats > 0;
     }
 
-    // Getters and setters for all fields
+    // Getters and setters
+
     public Long getId() {
         return id;
     }
@@ -198,7 +203,15 @@ public class NavOffer {
         this.updatedAt = updatedAt;
     }
 
-    // Additional Methods:
+    public int getCurrentSubscribers() {
+        return currentSubscribers;
+    }
+
+    public void setCurrentSubscribers(int currentSubscribers) {
+        this.currentSubscribers = currentSubscribers;
+    }
+
+
 
     // Method to check if the offer is still valid (not expired)
     public boolean isOfferValid() {
@@ -206,14 +219,14 @@ public class NavOffer {
     }
 
     // Method to update the offer details
-    public void updateOffer(String departureCity, String arrivalCity, LocalDate startDate, String endDate,
-                            String departureTime, LocalTime arrivalTime, int maxSubscribers, int availableSeats,
+    public void updateOffer(String departureCity, String arrivalCity, LocalDate startDate, LocalDate endDate,
+                            LocalTime departureTime, LocalTime arrivalTime, int maxSubscribers, int availableSeats,
                             String vehicleDescription) {
         this.departureCity = departureCity;
         this.arrivalCity = arrivalCity;
         this.startDate = startDate;
-        this.endDate = LocalDate.parse(endDate);
-        this.departureTime = LocalTime.parse(departureTime);
+        this.endDate = endDate;
+        this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
         this.maxSubscribers = maxSubscribers;
         this.availableSeats = availableSeats;

@@ -3,29 +3,155 @@
 <head>
   <title>User Dashboard</title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- Font Awesome -->
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background-color: #343a40 !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand,
+    .nav-link {
+      color: white !important;
+    }
+
+    .navbar-brand:hover,
+    .nav-link:hover {
+      color: #f8f9fa !important;
+      text-decoration: underline;
+    }
+
+    .container {
+      flex: 1;
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+
+    .welcome-message {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+
+    .icon-container {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin-top: 30px;
+    }
+
+    .icon-link {
+      text-decoration: none;
+      color: white;
+      text-align: center;
+      transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    .icon-link:hover {
+      transform: scale(1.1);
+      color: #ddd;
+    }
+
+    .icon {
+      font-size: 5rem;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      background-color: #343a40;
+      color: #fff;
+      padding: 15px 0;
+      text-align: center;
+    }
+
+    /* Navbar Small Icons */
+    .nav-link i {
+      font-size: 1.2rem;
+      margin-right: 8px;
+    }
+  </style>
 </head>
 <body>
-<!-- Specific Menu for User Dashboard -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
   <a class="navbar-brand" href="#">NavCar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="nav-link" href="/offer-consultation">Consult Offers</a>
+        <a class="nav-link" th:href="@{/offer-consultation}">
+          <i class="fas fa-search"></i> Consult Offers
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Add Request</a>
+        <a class="nav-link" th:href="@{/add-request}">
+          <i class="fas fa-plus-circle"></i> Add Request
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" th:href="@{/logout}">Logout</a>
+        <a class="nav-link" th:href="@{/request_consultation}">
+          <i class="fas fa-list"></i> List Request
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/logout}">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
       </li>
     </ul>
   </div>
 </nav>
 
+<!-- Dashboard Content -->
 <div class="container mt-5">
-  <h1 class="text-center">User Dashboard</h1>
-  <p class="text-center">Welcome, <span th:text="${username}"></span>!</p>
+  <h1>User Dashboard</h1>
+  <p class="welcome-message">Welcome, <span th:text="${username}"></span>!</p>
+
+  <!-- Grand Icons Section -->
+  <div class="icon-container">
+    <a class="icon-link" th:href="@{/offer-consultation}">
+      <i class="fas fa-search icon"></i>
+      <p>Consult Offers</p>
+    </a>
+    <a class="icon-link" th:href="@{/add-request}">
+      <i class="fas fa-plus-circle icon"></i>
+      <p>Add Request</p>
+    </a>
+    <a class="icon-link" th:href="@{/request_consultation}">
+      <i class="fas fa-list icon"></i>
+      <p>List Request</p>
+    </a>
+  </div>
 </div>
+
+<!-- Footer -->
+<footer>
+  <p>&copy; 2025 NavCar</p>
+</footer>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

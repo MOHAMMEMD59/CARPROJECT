@@ -3,11 +3,46 @@
 <head>
     <title>Error</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8d7da; /* Light red for error tone */
+            color: #721c24;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .error-container {
+            margin-top: 10%;
+            background-color: #f8d7da; /* Same as the background */
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #f5c6cb;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-home {
+            margin-top: 20px;
+            background-color: #721c24;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-home:hover {
+            background-color: #501316;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-5">
-    <h1 class="text-center">Something went wrong</h1>
-    <p class="text-center">We are sorry for the inconvenience. Please try again later.</p>
+<div class="container d-flex justify-content-center">
+    <div class="error-container text-center">
+        <h1><i class="fas fa-exclamation-triangle"></i> Oops! Something Went Wrong</h1>
+        <p class="mt-3">We apologize for the inconvenience. Please try again later or contact support if the problem persists.</p>
+        <a href="/dashboard" class="btn btn-home">Back to Home</a>
+    </div>
 </div>
 </body>
 </html>

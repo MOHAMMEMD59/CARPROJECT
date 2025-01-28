@@ -1,20 +1,112 @@
-<!-- offer-consultation.html -->
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>User Dashboard</title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- Font Awesome -->
+  <style>
+    /* Background Gradient from Index Page */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navbar Styles */
+    .navbar {
+      background-color: #343a40;
+    }
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+    }
+    .navbar-brand:hover, .nav-link:hover {
+      color: #f8f9fa !important;
+      text-decoration: underline;
+    }
+
+    /* Table Styles */
+    .table {
+      background-color: #ffffff;
+      color: #333;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    .table th, .table td {
+      padding: 15px;
+    }
+    .thead-light {
+      background-color: #343a40;
+      color: #fff;
+    }
+
+    /* Button Styles */
+    .btn-primary {
+      background-color: #007bff;
+      border-radius: 25px;
+      padding: 10px 20px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #0f5cff;
+      transform: scale(1.05);
+    }
+
+    /* Footer Styles */
+    footer {
+      background-color: #343a40;
+      color: #fff;
+      padding: 15px 0;
+      text-align: center;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      margin-top: auto;
+    }
+
+    /* Content Styling */
+    main {
+      margin: 20px auto;
+      text-align: center;
+      max-width: 1000px;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    p {
+      font-size: 1.2rem;
+    }
+
+    /* Search Bar Styles */
+    .search-bar {
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
-<!-- Specific Menu for User Dashboard -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
   <a class="navbar-brand" href="#">NavCar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="nav-link" href="/offer-consultation">Consult Offers</a>
+        <a class="nav-link" th:href="@{/offer-consultation}">Consult Offers</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Add Request</a>
+        <a class="nav-link" th:href="@{/add-request}">Add Request</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" th:href="@{/request_consultation}">List Requests</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" th:href="@{/logout}">Logout</a>
@@ -23,76 +115,103 @@
   </div>
 </nav>
 
-<main class="container mt-4">
-  <h1 class="text-center">Available Shuttle Offers</h1>
-  <p class="text-center">Consult the available shuttle offers below and subscribe to your preferred ones.</p>
+<!-- Main Content -->
+<main class="container">
 
-  <!-- Table to display available shuttle offers -->
+
+  <h1>Available Shuttle Offers</h1>
+  <p>Consult the available shuttle offers below and subscribe to your preferred ones.</p>
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <input type="text" id="searchInput" class="form-control" placeholder="Search by any field..." onkeyup="searchTable()">
+  </div>
+
+
   <table class="table table-bordered">
     <thead class="thead-light">
     <tr>
+      <th scope="col">Company</th>
       <th scope="col">Departure City</th>
       <th scope="col">Arrival City</th>
       <th scope="col">Start Date</th>
       <th scope="col">End Date</th>
       <th scope="col">Available Seats</th>
+      <th scope="col">Status</th>
       <th scope="col">Action</th>
     </tr>
     </thead>
     <tbody id="offersTable">
-    <!-- Offers will be populated here by JavaScript -->
+   <tr th:each="offer : ${allAvailableOffers}" >
+     <td th:text="${offer.company.name}"></td>
+                     <td th:text="${offer.departureCity}"></td>
+                     <td th:text="${offer.arrivalCity}"></td>
+                     <td th:text="${offer.startDate}"></td>
+                     <td th:text="${offer.endDate}"></td>
+                      <td th:text="${offer.availableSeats}"></td>
+                      <td th:text="${offer.availableSeats==0? 'closed' : 'opened' }"></td>
+      <td><button class="btn btn-primary" type="submit">Subscribe</button> </td>
+   </tr>
     </tbody>
   </table>
+
 </main>
 
-<footer class="bg-light text-center py-3">
-  <p>&copy; 2025 Transport Company</p>
+<!-- Footer -->
+<footer>
+  <p>&copy; 2025 NavCar</p>
 </footer>
 
 <!-- Add Bootstrap and jQuery for handling dynamic behavior -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+
+
   // Function to fetch available shuttle offers from the backend
-  function fetchAvailableOffers() {
-    fetch('/offers/available') // GET request to the backend
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              return response.json(); // Parse JSON response
-            })
-            .then(offers => {
-              const tableBody = document.getElementById('offersTable');
-              tableBody.innerHTML = '';  // Clear existing rows
-
-              if (offers.length === 0) {
-                const noOffersMessage = document.createElement('tr');
-                noOffersMessage.innerHTML = '<td colspan="6" class="text-center">No available offers at the moment.</td>';
-                tableBody.appendChild(noOffersMessage);
-                return;
-              }
-
-              // Iterate through the offers and create rows in the table
-              offers.forEach(offer => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                        <td>${offer.}</td>
-                        <td>${offer.departureCity}</td>
-                        <td>${offer.arrivalCity}</td>
-                        <td>${offer.startDate}</td>
-                        <td>${offer.endDate}</td>
-                        <td>${offer.maxSubscribers - offer.currentSubscribers}</td>
-                        <td><button class="btn btn-primary" onclick="subscribeToOffer(${offer.id})">Subscribe</button></td>
-                    `;
-                tableBody.appendChild(row);
-              });
-            })
-            .catch(error => {
-              console.error('Error fetching offers:', error);
-              alert('Failed to fetch available offers.');
-            });
-  }
+  // function fetchAvailableOffers() {
+  //   fetch('/navOffers/available') // GET request to the backend
+  //           .then(response => {
+  //             if (!response.ok) {
+  //               throw new Error('Network response was not ok');
+  //             }
+  //             return response.json(); // Parse JSON response
+  //           })
+  //           .then(offers => {
+  //             const tableBody = document.getElementById('offersTable');
+  //             tableBody.innerHTML = '';  // Clear existing rows
+  //
+  //             if (offers.length === 0) {
+  //               const noOffersMessage = document.createElement('tr');
+  //               noOffersMessage.innerHTML = '<td colspan="7" class="text-center">No available offers at the moment.</td>';
+  //               tableBody.appendChild(noOffersMessage);
+  //               return;
+  //             }
+  //
+  //             // Iterate through the offers and create rows in the table
+  //             offers.forEach(offer => {
+  //               const row = document.createElement('tr');
+  //               const availableSeats = offer.maxSubscribers - offer.currentSubscribers;
+  //               const status = availableSeats > 0 ? 'Open' : 'Closed';
+  //
+  //               row.innerHTML = `
+  //                 <td>${offer.company.name}</td>
+  //                 <td>${offer.departureCity}</td>
+  //                 <td>${offer.arrivalCity}</td>
+  //                 <td>${offer.startDate}</td>
+  //                 <td>${offer.endDate}</td>
+  //                 <td>${availableSeats}</td>
+  //                 <td>${status}</td>
+  //                 <td>${availableSeats > 0 ? `<button class="btn btn-primary" onclick="subscribeToOffer(${offer.id})">Subscribe</button>` : 'N/A'}</td>
+  //               `;
+  //               tableBody.appendChild(row);
+  //             });
+  //           })
+  //           .catch(error => {
+  //             console.error('Error fetching offers:', error);
+  //             alert('Failed to fetch available offers.');
+  //           });
+  // }
 
   // Function to handle subscribing to an offer
   function subscribeToOffer(offerId) {
@@ -101,12 +220,13 @@
 
     if (subscriberName && subscriberEmail) {
       // POST request to subscribe to the offer
-      fetch(`/offers/${offerId}/subscribe?subscriberName=${subscriberName}&subscriberEmail=${subscriberEmail}`, {
+      fetch(`/navOffers/${offerId}/subscribe?subscriberName=${subscriberName}&subscriberEmail=${subscriberEmail}`, {
         method: 'POST',
       })
               .then(response => response.json())
               .then(data => {
                 alert(data.message);  // Show the response message (success or failure)
+                fetchAvailableOffers(); // Refresh the offers list
               })
               .catch(error => {
                 console.error('Error subscribing to the offer:', error);
@@ -114,6 +234,29 @@
               });
     } else {
       alert('Please provide both your name and email.');
+    }
+  }
+
+  // Function to search the table based on user input
+  function searchTable() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toUpperCase();
+    const table = document.getElementById('offersTable');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+      const cells = rows[i].getElementsByTagName('td');
+      let found = false;
+
+      for (let j = 0; j < cells.length; j++) {
+        const cell = cells[j];
+        if (cell && cell.textContent.toUpperCase().includes(filter)) {
+          found = true;
+          break;
+        }
+      }
+
+      rows[i].style.display = found ? '' : 'none';
     }
   }
 

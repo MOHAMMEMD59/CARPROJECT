@@ -3,48 +3,185 @@
 <head>
     <title>Register</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- Font Awesome -->
+    <!-- Add custom CSS for the registration page -->
+    <style>
+        /* Body background gradient */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc); /* Same gradient as index page */
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Add smooth animation to the navbar on hover */
+        .nav-item a {
+            transition: color 0.3s ease-in-out;
+        }
+
+        .nav-item a:hover {
+            color: #007bff;
+        }
+
+        /* Style for the registration form */
+        .register-card {
+            max-width: 400px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+            background-color: #ffffff;
+            color: #333;
+            margin-top: 50px; /* Add some space from the top */
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Apply navbar background color */
+        .navbar {
+            background-color: #343a40 !important; /* Dark background for navbar */
+        }
+
+        .navbar .navbar-brand {
+            color: white !important; /* White color for brand */
+        }
+
+        /* Apply white color to navbar links */
+        .navbar .nav-link {
+            color: white !important; /* White color for links */
+        }
+
+        /* Change link color on hover */
+        .navbar .nav-link:hover {
+            color: #ddd !important; /* Light hover effect */
+        }
+
+        /* Hero Section Style */
+        .hero-section {
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            margin-top: 20px;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0f5cff;
+            transform: scale(1.05);
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Ensure the form is fully visible without scroll */
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 60px); /* Adjust the height to fit without overflow */
+        }
+    </style>
 </head>
 <body>
-<!-- Specific Menu for Register Page -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<!-- Navbar for Register Page -->
+<nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="#">NavCar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/register}">Register</a>
+                <a class="nav-link" href="/register">
+                    <i class="fas fa-user-plus"></i> Register
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/login}">Login</a>
+                <a class="nav-link" href="/login">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
             </li>
         </ul>
     </div>
 </nav>
 
-<div class="container">
-    <h1 class="mt-5">Registration Form</h1>
-    <form th:action="@{/register}" th:object="${user}" method="post">
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" class="form-control" th:field="*{username}" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" class="form-control" th:field="*{password}" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" class="form-control" th:field="*{email}" required>
-        </div>
-        <div class="form-group">
-            <label for="role">Role:</label>
-            <select id="role" class="form-control" th:field="*{role}">
-                <option value="user">User</option>
-                <option value="admin_company">Admin Company</option>
-                <option value="admin">Admin</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Register</button>
-    </form>
+<!-- Hero Section -->
+<div class="container hero-section">
+    <h1 class="hero-title">Create Your Account</h1>
+    <p class="hero-description">Join Navette Cars today and enjoy seamless transport services!</p>
 </div>
+
+<!-- Registration Form -->
+<div class="container form-container">
+    <div class="register-card">
+        <form th:action="@{/register}" th:object="${user}" method="post">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" class="form-control" th:field="*{username}" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" class="form-control" th:field="*{password}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" class="form-control" th:field="*{email}" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select id="role" class="form-control" th:field="*{role}">
+                    <option value="user">User</option>
+                    <option value="admin_company">Admin Company</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+        </form>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 NavCar</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

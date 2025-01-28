@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class DashboardController {
 
+
+
     @GetMapping("/dashboard")
     public String showDashboard(HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedInUser");
