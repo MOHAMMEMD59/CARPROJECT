@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Add New Offer</title>
+  <title>Ajouter une offre de navette</title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
   <style>
-    /* Global Styles */
+
     body {
       background: linear-gradient(to bottom right, #6a11cb, #2575fc);
       color: #ffffff;
@@ -39,15 +39,36 @@
       border-radius: 25px;
     }
 
-    footer {
-      color: #ffffff;
-      margin-top: auto;
+     .table {
+      background-color: #ffffff;
+      color: #333;
+      border-radius: 10px;
+      margin-top: 20px;
     }
+    .table th, .table td {
+      text-align: center;
+      padding: 12px;
+      border: 2px solid #ccc;
+    }
+     .th {
+      width: 14%;
+    }
+    td {
+      width: 14%;
+      }
+    .thead-light {
+      background-color: #343a40;
+      color: #fff;
+    }
+
   </style>
 </head>
 <body>
-<!-- Responsive Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light">
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-dark">
   <a class="navbar-brand" href="#">NavCar</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -55,99 +76,124 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="nav-link" href="/company-add-offer"><i class="fas fa-plus-circle"></i> Add Offer</a>
+        <a class="nav-link" href="/company-add-offer">
+          <i class="fas fa-plus-circle"></i> Ajouter un offre
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#"><i class="fas fa-search"></i> Consult Requests</a>
+        <a class="nav-link" href="/request_consultation">
+          <i class="fas fa-list"></i> Consultation des demandes
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a class="nav-link" th:href="@{/logout}">
+          <i class="fas fa-sign-out-alt"></i> Se deconnecter
+        </a>
       </li>
     </ul>
   </div>
 </nav>
 
-<!-- Main Content -->
+<th:block th:if="${result}">
+  <div class="alert alert-primary" role="alert">
+    <h1><span th:text="${result}"></span></h1>
+  </div>
+</th:block>
+
 <main class="container mt-5">
   <div class="dashboard-card">
-    <h2 class="text-center mb-4">Add New Shuttle Offer</h2>
+    <h2 class="text-center mb-4">Ajout d'un offre de navette</h2>
     <form th:action="@{/add-offer}" th:object="${navOffer}" method="post">
-      <!-- Company Info -->
 
       <div class="form-group">
-        <label for="company">Company</label>
+        <label for="company">Société de transport</label>
         <select class="form-control" name="company" id="company" required>
           <option value="" disabled selected>Select a company</option>
           <option th:each="company : ${company}" th:value="${company.id}" th:text="${company.name}"></option>
         </select>
       </div>
 
-      <!-- Departure & Arrival Cities -->
+
       <div class="form-group">
-        <label for="departureCity">Departure City</label>
+        <label for="departureCity">Ville de départ</label>
         <select class="form-control" id="departureCity" name="departureCity" required>
-          <option value="" disabled selected>Select a city</option>
+          <option value="" disabled selected>selectionner une ville</option>
           <option th:each="city : ${cities}" th:value="${city.nameCity}" th:text="${city.nameCity}"></option>
         </select>
       </div>
       <div class="form-group">
-        <label for="arrivalCity">Arrival City</label>
+        <label for="arrivalCity">ville d'arrivée</label>
         <select class="form-control" id="arrivalCity" name="arrivalCity" required>
-          <option value="" disabled selected>Select a city</option>
+          <option value="" disabled selected>selectionner une ville</option>
           <option th:each="city : ${cities}" th:value="${city.nameCity}" th:text="${city.nameCity}"></option>
         </select>
       </div>
 
-      <!-- Dates -->
+
       <div class="form-row">
         <div class="form-group col-md-6">
-          <label for="startDate">Start Date</label>
-          <input type="date" class="form-control" id="startDate" name="startDate" required>
+          <label for="startDate">Date debut</label>
+          <input type="date" class="form-control" id="startDate" name="startDate"  required>
         </div>
         <div class="form-group col-md-6">
-          <label for="endDate">End Date</label>
+          <label for="endDate">Date fin</label>
           <input type="date" class="form-control" id="endDate" name="endDate" required>
         </div>
       </div>
 
-      <!-- Times -->
+
       <div class="form-row">
         <div class="form-group col-md-6">
-          <label for="departureTime">Departure Time</label>
+          <label for="departureTime">Heure de departe</label>
           <input type="time" class="form-control" id="departureTime" name="departureTime" required>
         </div>
         <div class="form-group col-md-6">
-          <label for="arrivalTime">Arrival Time</label>
+          <label for="arrivalTime">Heure d'arrive</label>
           <input type="time" class="form-control" id="arrivalTime" name="arrivalTime" required>
         </div>
       </div>
-
-      <!-- Max Subscribers & Vehicle Description -->
       <div class="form-row">
         <div class="form-group col-md-6">
-          <label for="maxSubscribers">Max Subscribers</label>
-          <input type="number" class="form-control" id="maxSubscribers" name="maxSubscribers" min="1" required>
+          <label for="priceOffer">Prix de l'offre d'abonnement ( MAD )</label>
+          <input type="number" class="form-control" id="priceOffer" name="priceOffer" min="1" required>
         </div>
         <div class="form-group col-md-6">
-          <label for="vehicleDescription">Vehicle Description</label>
+          <label for="maxSubscribers">Le nombre maximum des abonnées</label>
+          <input type="number" class="form-control" id="maxSubscribers" name="maxSubscribers" min="1" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="vehicleDescription">Description du Car</label>
           <textarea class="form-control" id="vehicleDescription" name="vehicleDescription" rows="3" required></textarea>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Add offer</button>
 
-      <!-- Submit Button -->
-<!--      <button type="submit" class="btn btn-primary btn-block" id="submitButton">-->
-<!--        <span id="submitText">Add Offer</span>-->
-<!--        <span id="loadingSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>-->
-<!--      </button>-->
+      <button type="submit" class="btn btn-primary">Ajouter</button>
+
+
+
     </form>
   </div>
 </main>
 
-<!-- Footer -->
-<footer class="text-center py-3 mt-4">
-  <p>&copy; 2025 Transport Company</p>
-</footer>
+<script>
+  document.getElementById("addOfferForm").addEventListener("submit", function(event) {
+      let today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+      let departureDate = document.getElementById("startDate").value;
+      let arrivalDate = document.getElementById("endDate").value;
+
+      if (departureDate < today || arrivalDate < today) {
+          alert("rectifier la date choisi , ne doit pas etre du passé.");
+          event.preventDefault(); // Prevent form submission
+      }
+  });
+</script>
+
+<!--&lt;!&ndash; Footer &ndash;&gt;-->
+<!--<footer style="text-align: center; position: fixed; bottom: 0; left: 0; right: 0; background-color: #343a40; color: #fff; padding: 15px 0;">-->
+<!--  <p>&copy; 2025 NavCar</p>-->
+<!--</footer>-->
 
 </body>
 </html>

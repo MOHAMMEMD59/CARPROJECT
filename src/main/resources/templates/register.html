@@ -6,7 +6,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- Font Awesome -->
     <!-- Add custom CSS for the registration page -->
     <style>
-        /* Body background gradient */
+
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(to right, #6a11cb, #2575fc); /* Same gradient as index page */
@@ -18,7 +18,7 @@
             flex-direction: column;
         }
 
-        /* Add smooth animation to the navbar on hover */
+
         .nav-item a {
             transition: color 0.3s ease-in-out;
         }
@@ -27,7 +27,7 @@
             color: #007bff;
         }
 
-        /* Style for the registration form */
+
         .register-card {
             max-width: 400px;
             margin: auto;
@@ -40,7 +40,7 @@
             margin-top: 50px; /* Add some space from the top */
         }
 
-        /* Fade-in animation */
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -52,26 +52,26 @@
             }
         }
 
-        /* Apply navbar background color */
+
         .navbar {
-            background-color: #343a40 !important; /* Dark background for navbar */
+            background-color: #343a40 !important;
         }
 
         .navbar .navbar-brand {
-            color: white !important; /* White color for brand */
+            color: white !important;
         }
 
-        /* Apply white color to navbar links */
+
         .navbar .nav-link {
-            color: white !important; /* White color for links */
+            color: white !important;
         }
 
-        /* Change link color on hover */
+
         .navbar .nav-link:hover {
-            color: #ddd !important; /* Light hover effect */
+            color: #ddd !important;
         }
 
-        /* Hero Section Style */
+
         .hero-section {
             text-align: center;
             margin-top: 80px;
@@ -99,27 +99,16 @@
             transform: scale(1.05);
         }
 
-        footer {
-            background-color: #343a40;
-            color: #fff;
-            padding: 15px 0;
-            text-align: center;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-
-        /* Ensure the form is fully visible without scroll */
         .form-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: calc(100vh - 60px); /* Adjust the height to fit without overflow */
+            height: calc(100vh - 60px);
         }
     </style>
 </head>
 <body>
-<!-- Navbar for Register Page -->
+
 <nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="#">NavCar</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -141,22 +130,21 @@
     </div>
 </nav>
 
-<!-- Hero Section -->
 <div class="container hero-section">
-    <h1 class="hero-title">Create Your Account</h1>
-    <p class="hero-description">Join Navette Cars today and enjoy seamless transport services!</p>
+    <h1 class="hero-title">Creer Votre Compte</h1>
+    <p class="hero-description">Rejoignez Navette Cars dès aujourd'hui et profitez de services de transport sans faille !</p>
 </div>
 
-<!-- Registration Form -->
+
 <div class="container form-container">
     <div class="register-card">
         <form th:action="@{/register}" th:object="${user}" method="post">
             <div class="form-group">
-                <label for="username">Username:</label>
+                <label for="username">Nom utilisateur:</label>
                 <input type="text" id="username" class="form-control" th:field="*{username}" required>
             </div>
             <div class="form-group">
-                <label for="password">Password:</label>
+                <label for="password">Mot de passe:</label>
                 <input type="password" id="password" class="form-control" th:field="*{password}" required>
             </div>
             <div class="form-group">
@@ -171,15 +159,15 @@
                     <option value="admin">Admin</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Register</button>
+            <button type="submit" class="btn btn-primary btn-block">S'inscrire</button>
         </form>
     </div>
 </div>
 
-<!-- Footer -->
-<footer>
-    <p>&copy; 2025 NavCar</p>
-</footer>
+
+<!--<footer style="text-align: center; position: fixed; bottom: 0; left: 0; right: 0; background-color: #343a40; color: #fff; padding: 15px 0;">-->
+<!--    <p>&copy; 2025 NavCar</p>-->
+<!--</footer>-->
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -4,49 +4,49 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "subscription") // Specify the table name
+@Table(name = "subscription")
 public class Subscription {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment primary key
-    private Long id; // Unique identifier for the subscription
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "nav_offer_id", nullable = false) // Foreign key to the NavOffer
-    private NavOffer navOffer; // The shuttle offer that this subscription is related to
+    @JoinColumn(name = "nav_offer_id", nullable = false)
+    private NavOffer navOffer;
 
     @Column(nullable = false, length = 255)
-    private String subscriberName; // Name of the subscriber
+    private String subscriberName;
 
     @Column(nullable = false, length = 255)
-    private String subscriberEmail; // Email of the subscriber
+    private String subscriberEmail;
 
     @Column(nullable = false)
-    private LocalDateTime subscriptionDate; // Date and time when the subscription was made
+    private LocalDateTime subscriptionDate;
 
     @Column(nullable = false)
-    private boolean isActive; // Indicates if the subscription is still active
+    private boolean isActive;
 
     @Column(name = "created_at", updatable = false, nullable = false)
-    private LocalDateTime createdAt; // Timestamp when the subscription was created
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt; // Timestamp when the subscription was last updated
+    private LocalDateTime updatedAt;
 
-    // Default constructor
+
     public Subscription() {
     }
 
-    // Constructor with all parameters (excluding ID, which is auto-generated)
+
     public Subscription(NavOffer navOffer, String subscriberName, String subscriberEmail) {
         this.navOffer = navOffer;
         this.subscriberName = subscriberName;
         this.subscriberEmail = subscriberEmail;
-        this.subscriptionDate = LocalDateTime.now(); // Set the subscription date to the current time
-        this.isActive = true; // By default, a new subscription is active
+        this.subscriptionDate = LocalDateTime.now();
+        this.isActive = true;
     }
 
-    // Getters and Setters for all fields
+
     public Long getId() {
         return id;
     }
@@ -111,20 +111,20 @@ public class Subscription {
         this.updatedAt = updatedAt;
     }
 
-    // Automatically set the timestamps before persisting
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Automatically update the 'updatedAt' timestamp before updating the entity
+
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Method to deactivate the subscription (e.g., if the user cancels or unsubscribes)
+
     public void deactivateSubscription() {
         this.isActive = false;
     }

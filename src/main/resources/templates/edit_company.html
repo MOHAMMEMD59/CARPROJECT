@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Modification de la société de transport</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- Font Awesome -->
+  <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(to right, #6a11cb, #2575fc);
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .navbar {
+        background-color: #343a40 !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand,
+    .nav-link {
+        color: white !important;
+    }
+
+    .navbar-brand:hover,
+    .nav-link:hover {
+        color: #f8f9fa !important;
+        text-decoration: underline;
+    }
+
+    .container {
+        flex: 1;
+        max-width: 800px;
+        margin: auto;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .form-container {
+        margin-top: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        color: black; /* Set the label color to black */
+    }
+
+    .btn-primary {
+        background-color: #6a11cb;
+        border-color: #6a11cb;
+    }
+
+    .btn-primary:hover {
+        background-color: #2575fc;
+        border-color: #2575fc;
+    }
+
+    footer {
+        text-align: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #343a40;
+        color: #fff;
+        padding: 15px 0;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <a class="navbar-brand" href="#">NavCar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/offer_consultation_admin">
+          <i class="fas fa-th-list"></i> Liste des offres
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/admin_list_request}">
+          <i class="fas fa-file-alt"></i> Liste des demandes
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/list_user}">
+          <i class="fas fa-users"></i> Liste des utilisateurs
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/list_company">
+          <i class="fas fa-building"></i> Liste société de transport
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/logout}">
+          <i class="fas fa-sign-out-alt"></i> Se déconnecter
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container mt-5">
+  <h1>Modification de la société de transport </h1>
+
+  <div class="form-container">
+    <form th:action="@{'/editcompany/' + ${company.id}}" th:object="${company}" method="post">
+      <input type="hidden" th:field="*{id}"/>
+
+      <div class="form-group">
+      <label th:for="name">Id de la société de transport </label>
+      <input type="text" th:field="*{id}" class="form-control" required disabled/>
+      </div>
+
+      <div class="form-group">
+        <label th:for="name">Nom de la sociéte:</label>
+        <input type="text" th:field="*{name}" class="form-control" required/>
+      </div>
+
+
+
+      <button type="submit" class="btn btn-primary btn-block">Modifier</button>
+    </form>
+  </div>
+</div>
+
+<!--<footer style="text-align: center; position: fixed; bottom: 0; left: 0; right: 0; background-color: #343a40; color: #fff; padding: 15px 0;">-->
+<!--  <p>&copy; 2025 NavCar</p>-->
+<!--</footer>-->
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

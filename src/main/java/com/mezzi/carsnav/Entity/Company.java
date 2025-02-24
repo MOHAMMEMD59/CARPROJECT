@@ -7,34 +7,36 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "companies") // Specify the table name
+@Table(name = "companies")
 public class Company {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment primary key
-    private Long id; // Unique identifier for the transport company
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false, length = 255)
-    private String name; // Name of the transport company
+    private String name;
+
+    @Column(name = "image_path", length = 500)
+    private String imagePath;
 
     @Column(name = "created_at", updatable = false, nullable = false)
-    private LocalDateTime createdAt; // Timestamp of company creation
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt; // Timestamp of last update
+    private LocalDateTime updatedAt;
 
-    // Default constructor
+
     public Company() {
     }
 
-    // Constructor with parameters
+
     public Company(String name) {
         this.name = name;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Getter and Setter methods
     public Long getId() {
         return id;
     }
@@ -49,6 +51,14 @@ public class Company {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -67,7 +77,7 @@ public class Company {
         this.updatedAt = updatedAt;
     }
 
-    // Automatically update 'updatedAt' field before updating the entity
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

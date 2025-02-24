@@ -3,6 +3,8 @@ package com.mezzi.carsnav.Entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+
 @Entity
 @Table(name = "nav_offer")
 public class NavOffer {
@@ -36,6 +38,13 @@ public class NavOffer {
     @Column(nullable = false , name ="max_subscribers")
     private int maxSubscribers;
 
+
+
+    @Column(nullable = false , name ="price_offer")
+    private double priceOffer = 0.0;
+
+
+
     @Column(nullable = false , name ="available_seats")
     private int availableSeats;
 
@@ -50,6 +59,9 @@ public class NavOffer {
 
     @Column(nullable = false , name ="updated_at")
     private LocalDate updatedAt;
+
+    @OneToMany(mappedBy = "navOffer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Subscription> subscriptions;
 
 
     public NavOffer() {}
@@ -98,6 +110,14 @@ public class NavOffer {
     }
 
     // Getters and setters
+
+    public double getPriceOffer() {
+        return priceOffer;
+    }
+
+    public void setPriceOffer(double priceOffer) {
+        this.priceOffer = priceOffer;
+    }
 
     public Long getId() {
         return id;
@@ -220,7 +240,7 @@ public class NavOffer {
 
     // Method to update the offer details
     public void updateOffer(String departureCity, String arrivalCity, LocalDate startDate, LocalDate endDate,
-                            LocalTime departureTime, LocalTime arrivalTime, int maxSubscribers, int availableSeats,
+                            LocalTime departureTime, LocalTime arrivalTime, int maxSubscribers, int availableSeats,double priceOffer,
                             String vehicleDescription) {
         this.departureCity = departureCity;
         this.arrivalCity = arrivalCity;
@@ -230,6 +250,7 @@ public class NavOffer {
         this.arrivalTime = arrivalTime;
         this.maxSubscribers = maxSubscribers;
         this.availableSeats = availableSeats;
+        this.priceOffer=priceOffer;
         this.vehicleDescription = vehicleDescription;
         this.updatedAt = LocalDate.now();
     }

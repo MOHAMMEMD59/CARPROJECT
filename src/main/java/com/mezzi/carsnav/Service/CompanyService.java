@@ -1,8 +1,12 @@
 package com.mezzi.carsnav.Service;
 
 import com.mezzi.carsnav.Entity.Company;
+import com.mezzi.carsnav.Entity.User;
 import com.mezzi.carsnav.Repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,23 +18,54 @@ public class CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
 
+
+    public  void deleteCompany(Long Id) {
+        companyRepository.deleteById(Id);
+    }
+
+
     public Company getCompanyById(Long companyId) {
         return companyRepository.findById(companyId)
                 .orElseThrow(() -> new RuntimeException("Company not found"));
     }
 
-    // Assuming you are using Spring Security or some authentication method to get the current logged-in user
+
+    public Company findById(Long companyId) {
+        return companyRepository.findById(companyId).orElse(null);
+    }
+
     public Company getCompanyForCurrentUser() {
-        // For example, fetching the company for the logged-in user by their username
-        String username = "currentLoggedInUsername"; // Replace with actual user retrieval logic
+
+        String username = "currentLoggedInUsername";
         Optional<Company> company = companyRepository.findByName(username);
 
         return company.orElseThrow(() -> new RuntimeException("Company not found for the user"));
     }
 
-    public  List<Company> getAll() {
-        List<Company> companies = companyRepository.findAll();
-        return companies;
+
+    public List<Company> getAll() {
+        return companyRepository.findAll();  // This will return a List<Company>
+
+         }
+
+         public Page<Company> getAll(int page, int size) {
+            Pageable pageable = PageRequest.of(page-1, size);
+            return companyRepository.findAll(pageable);
+        }
+
+
+    public void updatecompany(Company company) {
+        // Check if the user exists
+        if (company.getId() == null) {
+            throw new IllegalArgumentException("User ID cannot be null for update");
+        }
+
+        Company existingCompany = companyRepository.findById(company.getId())
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + company.getId()));
+
+        existingCompany.setName(company.getName());
+
+        companyRepository.save(existingCompany);
     }
 
 }

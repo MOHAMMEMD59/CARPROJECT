@@ -9,7 +9,7 @@ public class Request {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_request")
+    @Column(name = "request_id")
     private Long requestId;
 
     @Column(name = "departure_city", nullable = false)
@@ -24,11 +24,17 @@ public class Request {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
+
+
+
+    @Column(name = "traiter", nullable = true)
+    private int traiter;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false) // Foreign key column
     private User user; // Assuming you already have a User entity
 
-    // Getters and Setters
+
     public Long getRequestId() {
         return requestId;
     }
@@ -76,4 +82,13 @@ public class Request {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public int isTraiter() {
+        return traiter;
+    }
+
+   public void settraiter(int b){
+        this.traiter= b;}
+
+
 }

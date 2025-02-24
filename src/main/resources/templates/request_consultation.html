@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Requests Consultation</title>
+    <title>Consultation des demandes</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
@@ -11,7 +11,7 @@
             color: #fff;
             margin: 0;
             padding: 0;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
@@ -26,39 +26,34 @@
 
         .navbar-brand:hover, .nav-link:hover {
             color: #f8f9fa !important;
-            text-decoration: underline;
         }
 
         .container {
             margin-top: 5%;
+            text-align: center;
         }
 
-        .table-bordered {
+        .table-container {
+            margin-top: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .table {
             background-color: #fff;
             color: #000;
         }
 
-        footer {
-            background-color: #343a40;
-            color: #fff;
-            padding: 15px 0;
-            text-align: center;
-            width: 100%;
-            margin-top: auto;
-        }
 
-        .search-bar {
-            margin-bottom: 20px;
-        }
-
-        .table th, .table td {
-            text-align: center;
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-
-<!-- Navbar -->
 
 <nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="#">NavCar</a>
@@ -68,73 +63,103 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/offer-consultation}">Consult Offers</a>
+                <a class="nav-link" href="/company-add-offer">
+                    <i class="fas fa-plus-circle"></i> Ajouter un offre
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" th:href="@{/add-request}">Add Request</a>
+                <a class="nav-link" href="/request_consultation">
+                    <i class="fas fa-list"></i> Consultation des demandes
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" th:href="@{/request_consultation}">List Request</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/logout}">Logout</a>
+                <a class="nav-link" th:href="@{/logout}">
+                    <i class="fas fa-sign-out-alt"></i> Se deconnecter
+                </a>
             </li>
         </ul>
     </div>
 </nav>
 
-<!-- Main Content -->
 <div class="container">
-    <h1 class="text-center">Requests Consultation</h1>
-
-    <!-- Search Bar -->
-    <div class="row mt-4 search-bar">
+    <h1>Consultation des demandes</h1>
+    <div class="row mt-4">
         <div class="col-md-8 offset-md-2">
-            <input type="text" id="searchInput" class="form-control" placeholder="Search by Departure or Arrival City, or User" onkeyup="filterTable()">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by Departure, Arrival City, or User" onkeyup="filterTable()">
         </div>
     </div>
+    <div class="table-container">
+        <table class="table table-bordered text-center mt-4" id="requestsTable">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">Ville de depart</th>
+                <th scope="col">Ville d'arrive</th>
+                <th scope="col">Date de debut</th>
+                <th scope="col">Date fin</th>
+                <th scope="col">User</th>
+                <th scope="col" th:if="${session.loggedInUser.getRole()=='admin_company'}">Action</th>
+                <th scope="col" th:if="${session.loggedInUser.getRole()=='admin'}">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="request, iterStat : ${requests}">
+                <td th:text="${request.departureCity}">City</td>
+                <td th:text="${request.arrivalCity}">City</td>
+                <td th:text="${request.startDate}">2025-01-01</td>
+                <td th:text="${request.endDate}">2025-01-10</td>
+                <td th:text="${request.user.username}">Username</td>
+                <td th:if="${session.loggedInUser.getRole()=='admin_company'}">
+                    <a th:href="@{|/cancel-request?requestId=${request.getRequestId()}|}">
+                        <button class="btn btn-danger traiter-button" >
+                            Annuler
+                        </button>
+                    </a>
+                    <a th:href="@{|/traiter-request?requestId=${request.getRequestId()}|}">
+                    <button class="btn btn-primary traiter-button" >
+                        Traiter
+                    </button>
+                    </a>
+                </td>
+                <td th:if="${session.loggedInUser.getRole() == 'admin'}"
+                    th:text="${request.isTraiter == 0 ? 'Encours' : (request.isTraiter == 1 ? 'Traiter' : 'Annuler')}">
+                </td>
 
-    <!-- Requests Table -->
-    <table class="table table-bordered mt-4" id="requestsTable">
-        <thead class="thead-light">
-        <tr>
-            <th scope="col">Departure City</th>
-            <th scope="col">Arrival City</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
-            <th scope="col">User</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="request, iterStat : ${requests}">
-            <td th:text="${request.departureCity}">City</td>
-            <td th:text="${request.arrivalCity}">City</td>
-            <td th:text="${request.startDate}">2025-01-01</td>
-            <td th:text="${request.endDate}">2025-01-10</td>
-            <td th:text="${request.user.username}">Username</td>
-        </tr>
-        <tr th:if="${#lists.isEmpty(requests)}">
-            <td colspan="5" class="text-center">No matching requests found</td>
-        </tr>
-        </tbody>
-    </table>
+            </tr>
+            <tr th:if="${#lists.isEmpty(requests)}">
+                <td colspan="5">Aucune demande trouver</td>
+            </tr>
+            </tbody>
+
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{|/request_consultation?page=${currentPage - 1}&size=10|}">&laquo; Previous</a>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">Page <strong th:text="${currentPage}"></strong> of <strong th:text="${totalPages}"></strong></span>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                    <a class="page-link" th:href="@{|/request_consultation?page=${currentPage + 1}&size=10|}">Next &raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
 
-<!-- Footer -->
-<footer>
-    <p>&copy; 2025 NavCar</p>
-</footer>
+<!--<footer style="text-align: center; position: fixed; bottom: 0; left: 0; right: 0; background-color: #343a40; color: #fff; padding: 15px 0;">-->
+<!--    <p>&copy; 2025 NavCar</p>-->
+<!--</footer>-->
 
-<!-- Add Bootstrap and jQuery for handling dynamic behavior -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
+
+
 <script>
-    // Function to filter the table based on user input
     function filterTable() {
         const searchInput = document.getElementById('searchInput').value.toLowerCase();
         const rows = document.querySelectorAll('#requestsTable tbody tr');
-
         rows.forEach(row => {
             const cells = row.getElementsByTagName('td');
             let match = false;
@@ -142,13 +167,12 @@
                 const cellText = cells[i].textContent || cells[i].innerText;
                 if (cellText.toLowerCase().includes(searchInput)) {
                     match = true;
-                    break; // If one cell matches, no need to check the rest
+                    break;
                 }
             }
-            row.style.display = match ? '' : 'none'; // Show or hide the row based on match
+            row.style.display = match ? '' : 'none';
         });
     }
 </script>
-
 </body>
 </html>

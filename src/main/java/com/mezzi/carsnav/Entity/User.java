@@ -28,7 +28,7 @@ public class User {
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private String role = "user"; // New role field with default value
+    private String role = "user";
 
     @PrePersist
     protected void onCreate() {
@@ -36,7 +36,7 @@ public class User {
         this.enabled = true;
     }
 
-    // Constructors, Getters, and Setters
+
     public User() {}
 
     public User(String username, String password, String email) {
@@ -47,7 +47,6 @@ public class User {
         this.role = "user"; // Default role
     }
 
-    // Getters and Setters for all fields including the new role field
     public Long getId() {
         return id;
     }

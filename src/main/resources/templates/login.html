@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Login</title>
+  <title>LOGIN PAGE </title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
@@ -87,37 +87,37 @@
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
         <a class="nav-link" th:href="@{/register}">
-          <i class="fas fa-user-plus"></i> Register
+          <i class="fas fa-user-plus"></i> S'inscrire
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link" th:href="@{/login}">
-          <i class="fas fa-sign-in-alt"></i> Login
+          <i class="fas fa-sign-in-alt"></i> Se connecter
         </a>
       </li>
     </ul>
   </div>
 </nav>
 
-
+<
 <div class="login-card">
-  <h2 class="text-center mb-4">Login</h2>
+  <h2 class="text-center mb-4">Se connecter</h2>
   <form th:action="@{/login}" method="post">
     <div class="form-group">
-      <label for="username">Username</label>
+      <label for="username">Le nom utilisateur</label>
       <input type="text" id="username" class="form-control" name="username" placeholder="Enter your username" required>
     </div>
     <div class="form-group">
-      <label for="password">Password</label>
+      <label for="password">Le mot de passe</label>
       <input type="password" id="password" class="form-control" name="password" placeholder="Enter your password" required>
     </div>
     <div class="text-center">
-      <button type="submit" class="btn btn-primary btn-block">Login</button>
+      <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
       <p th:if="${error}" class="text-danger mt-3" th:text="${error}"></p>
     </div>
   </form>
   <div class="text-center mt-3">
-    <a href="#" th:href="@{/forgot-password}">Forgot your password?</a>
+    <a href="#" th:href="@{/forgot-password}">Mot de passe oublier?</a>
   </div>
 </div>
 

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+
+  <!-- Bootstrap for styling -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      background-color: #f4f6f8;
+      font-family: Arial, sans-serif;
+    }
+
+    .dashboard-container {
+      padding: 30px;
+    }
+
+    .chart-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 2rem;
+      color: #4e73df;
+    }
+
+    .chart-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .chart-card h5 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .chart-card canvas {
+      width: 100% !important;
+      height: 400px !important; /* Ensures all charts have the same height */
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container dashboard-container">
+  <h1>Admin Statistics</h1>
+
+
+  <div class="chart-container">
+    <!-- nombre utilisateur par role -->
+    <div class="col-md-6 col-sm-12">
+      <div class="chart-card">
+        <h5 class="text-center">Nombre Utilisateurs par Role</h5>
+        <canvas id="roleDistributionChart"></canvas>
+      </div>
+    </div>
+
+    <!--les navettes les plus populaire-->
+    <div class="col-md-6 col-sm-12">
+      <div class="chart-card">
+        <h5 class="text-center">Popularité des Offres de Navette</h5>
+        <canvas id="offerPopularityChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- abonnement par date -->
+  <div class="col-md-12">
+    <div class="chart-card">
+      <h5 class="text-center">Abonnements par Date</h5>
+      <canvas id="subscriptionByDateChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Fetch role distribution data
+    fetch('/admin/role-distribution')
+      .then(response => response.json())
+      .then(data => {
+        if (!data || Object.keys(data).length === 0) {
+          console.error("No data received for role distribution");
+          return;
+        }
+
+        const labels = Object.keys(data);
+        const values = Object.values(data);
+        const ctx = document.getElementById('roleDistributionChart').getContext('2d');
+
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Utilisateurs',
+              data: values,
+              backgroundColor: ['#FF6384', '#36A2EB'],
+              hoverBackgroundColor: ['#FF6384', '#36A2EB']
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (tooltipItem) {
+                    return `${tooltipItem.label}: ${tooltipItem.raw} utilisateurs`;
+                  }
+                }
+              }
+            }
+          }
+        });
+      })
+      .catch(error => console.error("Error fetching role distribution data:", error));
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Fetch offer popularity data
+    fetch('/admin/offer-popularity')
+      .then(response => response.json())
+      .then(data => {
+        if (!data || data.length === 0) {
+          console.error("No data received for offer popularity");
+          return;
+        }
+
+        const labels = data.map(offer => `${offer.departureCity} → ${offer.arrivalCity}`);
+        const values = data.map(offer => offer.currentSubscribers);
+        const ctx = document.getElementById('offerPopularityChart').getContext('2d');
+
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Nombre Abonnés',
+              data: values,
+              backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+              hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (tooltipItem) {
+                    return `${tooltipItem.label}: ${tooltipItem.raw} abonnés`;
+                  }
+                }
+              }
+            }
+          }
+        });
+      })
+      .catch(error => console.error("Error fetching offer popularity data:", error));
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch('/admin/subscriptions-by-date')
+      .then(response => response.json())
+      .then(data => {
+        if (!data || Object.keys(data).length === 0) {
+          console.error("No data received for subscriptions by date");
+          return;
+        }
+
+        // Extract sorted data
+        const labels = Object.keys(data).sort(); // Ensure it's sorted
+        const values = labels.map(date => data[date]);
+
+        const ctx = document.getElementById('subscriptionByDateChart').getContext('2d');
+
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Nombre Abonnés par Date',
+              data: values,
+              borderColor: '#36A2EB',
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (tooltipItem) {
+                    return `${tooltipItem.label}: ${tooltipItem.raw} abonnés`;
+                  }
+                }
+              }
+            }
+          }
+        });
+      })
+      .catch(error => console.error("Error fetching subscriptions by date:", error));
+  });
+</script>
+
+</body>
+</html>

@@ -5,7 +5,7 @@
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- Font Awesome -->
   <style>
-    /* Background Gradient from Index Page */
+
     body {
       font-family: 'Arial', sans-serif;
       background: linear-gradient(to right, #6a11cb, #2575fc);
@@ -17,7 +17,6 @@
       flex-direction: column;
     }
 
-    /* Navbar Styles */
     .navbar {
       background-color: #343a40;
     }
@@ -29,7 +28,6 @@
       text-decoration: underline;
     }
 
-    /* Table Styles */
     .table {
       background-color: #ffffff;
       color: #333;
@@ -37,14 +35,21 @@
       margin-top: 20px;
     }
     .table th, .table td {
-      padding: 15px;
+      text-align: center;
+      padding: 12px;
+      border: 2px solid #ccc;
     }
+     .th {
+      width: 14%;
+    }
+    td {
+      width: 14%;
+      }
     .thead-light {
       background-color: #343a40;
       color: #fff;
     }
 
-    /* Button Styles */
     .btn-primary {
       background-color: #007bff;
       border-radius: 25px;
@@ -57,19 +62,8 @@
       transform: scale(1.05);
     }
 
-    /* Footer Styles */
-    footer {
-      background-color: #343a40;
-      color: #fff;
-      padding: 15px 0;
-      text-align: center;
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      margin-top: auto;
-    }
 
-    /* Content Styling */
+
     main {
       margin: 20px auto;
       text-align: center;
@@ -83,7 +77,6 @@
       font-size: 1.2rem;
     }
 
-    /* Search Bar Styles */
     .search-bar {
       margin-bottom: 20px;
     }
@@ -91,7 +84,6 @@
 </head>
 <body>
 
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark">
   <a class="navbar-brand" href="#">NavCar</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,69 +92,80 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="nav-link" th:href="@{/offer-consultation}">Consult Offers</a>
+        <a class="nav-link" th:href="@{/offer-consultation}">Consultation des offres</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" th:href="@{/add-request}">Add Request</a>
+        <a class="nav-link" th:href="@{/subscriptions/my-subscriptions}">
+          <i class="fas fa-search"></i> Mes abonnements
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link active" th:href="@{/request_consultation}">List Requests</a>
+        <a class="nav-link" th:href="@{/add-request}">Ajouter une demande</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" th:href="@{/logout}">Logout</a>
+        <a class="nav-link active" href="/user_request_consultation">Liste des demandes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/logout}">Se deconnecter</a>
       </li>
     </ul>
   </div>
 </nav>
 
-<!-- Main Content -->
+</th:block>
+
 <main class="container">
 
+  <th:block th:if="${result}">
+    <div class="alert alert-primary" role="alert">
+      <h1> <span th:text="${result}"></span></h1>
+    </div>
+    </th:block>
+    <h1>Liste des offres disponibles</h1>
+  <p>Consultez les offres de navettes disponibles ci-dessous et abonnez-vous à celles qui vous conviennent</p>
 
-  <h1>Available Shuttle Offers</h1>
-  <p>Consult the available shuttle offers below and subscribe to your preferred ones.</p>
 
-  <!-- Search Bar -->
+
   <div class="search-bar">
     <input type="text" id="searchInput" class="form-control" placeholder="Search by any field..." onkeyup="searchTable()">
   </div>
-
-
   <table class="table table-bordered">
     <thead class="thead-light">
     <tr>
-      <th scope="col">Company</th>
-      <th scope="col">Departure City</th>
-      <th scope="col">Arrival City</th>
-      <th scope="col">Start Date</th>
-      <th scope="col">End Date</th>
-      <th scope="col">Available Seats</th>
-      <th scope="col">Status</th>
+      <th scope="col">Société de Transport</th>
+      <th scope="col">Ville de départ</th>
+      <th scope="col">Ville d'arrivé</th>
+      <th scope="col">Date début</th>
+      <th scope="col">Date fin</th>
+      <th scope="col">Places diposnible</th>
+      <th scope="col">Prix de l'offre    ( MAD )</th>
       <th scope="col">Action</th>
     </tr>
     </thead>
     <tbody id="offersTable">
    <tr th:each="offer : ${allAvailableOffers}" >
+
      <td th:text="${offer.company.name}"></td>
                      <td th:text="${offer.departureCity}"></td>
                      <td th:text="${offer.arrivalCity}"></td>
                      <td th:text="${offer.startDate}"></td>
                      <td th:text="${offer.endDate}"></td>
                       <td th:text="${offer.availableSeats}"></td>
-                      <td th:text="${offer.availableSeats==0? 'closed' : 'opened' }"></td>
-      <td><button class="btn btn-primary" type="submit">Subscribe</button> </td>
+                      <td th:text="${offer.priceOffer}"></td>
+    <!--<td th:text="${offer.availableSeats==0? 'closed' : 'opened' }"></td>-->
+     <td> <a th:href="@{|/subscribe?offerId=${offer.getId()}|}">
+       <button data-toggle="modal" data-target="#exampleModal" type="button" class="btn btn-primary" >S'abonner</button> </a>
+     </td>
    </tr>
     </tbody>
   </table>
-
 </main>
 
-<!-- Footer -->
-<footer>
-  <p>&copy; 2025 NavCar</p>
-</footer>
 
-<!-- Add Bootstrap and jQuery for handling dynamic behavior -->
+<!--<footer style="text-align: center; position: fixed; bottom: 0; left: 0; right: 0; background-color: #343a40; color: #fff; padding: 15px 0;">-->
+<!--  <p>&copy; 2025 NavCar</p>-->
+<!--</footer>-->
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>

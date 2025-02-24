@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>NavCar Project</title>
+    <title>Navette Cars Systéme</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
@@ -56,18 +56,115 @@
             transform: scale(1.05);
         }
 
-        footer {
-            background-color: #343a40;
-            color: #fff;
-            padding: 15px 0;
-            text-align: center;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-        }
+    /* Horizontal Search Section */
+.horizontal-search-section {
+    background-color: #f7f7f7; /* Light gray background */
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%; /* Occupy 80% of the screen width */
+    max-width: 1200px; /* Limit the max width */
+    gap: 15px; /* Space between input fields */
+}
+
+.input-group input {
+    width: 300px; /* Each input takes 300px width */
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #0069d9; /* Blue color for input focus */
+    outline: none;
+}
+
+.search-button {
+    background-color: #0069d9; /* Blue color matching the input focus */
+    color: white;
+    padding: 12px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    white-space: nowrap; /* Prevent the button text from wrapping */
+}
+
+.search-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+@media (max-width: 768px) {
+    .search-form {
+        width: 90%; /* Full width on smaller screens */
+    }
+
+    .input-group input {
+        width: 220px; /* Smaller width for inputs on smaller screens */
+    }
+}
+
+
+            /* Table Styles for Search Results */
+    .table-container {
+        margin: 30px auto;
+        width: 90%;
+        max-width: 1200px;
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .result-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .result-table th, .result-table td {
+        padding: 12px;
+        text-align: center;
+        border-bottom: 1px solid #f1f1f1;
+    }
+
+    .result-table th {
+        background-color: #0069d9; /* Matching blue color */
+        color: white;
+    }
+
+    .result-table td {
+        background-color: #f9f9f9;
+    }
+
+    .result-table tr:nth-child(even) td {
+        background-color: #f1f1f1;
+    }
+
+    .result-table tr:hover {
+        background-color: #dfe7f1; /* Light hover effect */
+    }
+
+
+
+
     </style>
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg navbar-dark">
     <a class="navbar-brand" href="#">NavCar</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,22 +173,75 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/register}"><i class="fas fa-user-plus"></i> Register</a>
+                <a class="nav-link" th:href="@{/register}"><i class="fas fa-user-plus"></i> S'inscrire</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/login}"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a class="nav-link" th:href="@{/login}"><i class="fas fa-sign-in-alt"></i> Se connecter</a>
             </li>
         </ul>
     </div>
 </nav>
 
-<div class="container hero-section">
-    <h1 class="hero-title">Welcome to Navette Cars</h1>
-    <p class="hero-description">Votre  car navette Platforme.</p>
-    <a href="/register" class="btn btn-primary">Get Started</a>
+<!--<div class="container hero-section">-->
+<!--    <h1 class="hero-title">Bienvenue Au Navette Car Systéme</h1>-->
+<!--    <p class="hero-description"> Votre  car navette Platforme .</p>-->
+<!--    <a href="/register" class="btn btn-primary">Commencer</a>-->
+<!--</div>-->
+
+<!-- Banner Section with Image -->
+<div class="banner-section">
+    <div class="banner-content">
+        <h1>Reserver Maintenant Votre abonnement et assurer votre nevette</h1>
+        <p>Rechercher, comparer et acheter votre abonnement  d’autocar </p>
+
+    </div>
 </div>
 
-<footer>
+<!-- Horizontal Search Section -->
+<div class="horizontal-search-section">
+    <form action="#" method="GET" th:action="@{/index}" th:object="${searchCriteria}" class="search-form">
+        <div class="input-group">
+            <input type="text" id="departureCity" th:field="*{departureCity}" placeholder="Ville de départ" />
+        </div>
+        <div class="input-group">
+            <input type="text" id="arrivalCity" th:field="*{arrivalCity}" placeholder="Ville d'arrivée" />
+        </div>
+        <button type="submit" class="search-button">Rechercher</button>
+    </form>
+</div>
+
+
+<div  th:if="${navOffers==null}">
+    <h1>aaaaaaaaa</h1>
+</div>
+<!-- Table for displaying NavOffer results -->
+<div class="table-container" th:if="${navOffers!=null}">
+    <table class="result-table">
+        <thead>
+        <tr>
+            <th>Société de Transport</th>
+            <th>Ville de départ</th>
+            <th>Ville d'arrivée</th>
+            <th>Heure de départ</th>
+            <th>Heure d'arrive</th>
+            <th>Places disponibles</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="offer : ${navOffers}">
+            <td th:text="${offer.company.name}"></td>
+            <td th:text="${offer.departureCity}"></td>
+            <td th:text="${offer.arrivalCity}"></td>
+            <td th:text="${offer.departureTime}"></td>
+            <td th:text="${offer.arrivalTime}"></td>
+            <td th:text="${offer.availableSeats}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<footer style="text-align: center; position: fixed; bottom: 0; left: 0; right: 0; background-color: #343a40; color: #fff; padding: 15px 0;">
     <p>&copy; 2025 NavCar</p>
 </footer>
 

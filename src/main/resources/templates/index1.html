@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <title>Navette Car</title>
+
+
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" th:href="@{/assets/css/fontawesome.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/templatemo-plot-listing.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/animated.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/owl.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<!--    <script th:src="@{/vendor/jquery/jquery.min.js}"></script>-->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  </head>
+
+<body>
+
+
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+
+
+  <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+
+            <a href="/" class="logo" >
+            </a>
+
+            <ul class="nav">
+              <li><a href="/register">S'inscrire</a></li>
+              <li><a href="/login">Se connecter</a></li>
+            </ul>
+            <a class='menu-trigger'>
+                <span>Menu</span>
+            </a>
+
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <div class="main-banner">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="top-text header-text">
+            <h6>Reserver Maintenant Votre abonnement et assurer votre navette</h6>
+            <h2>Rechercher, comparer et acheter votre abonnement d’autocar</h2>
+          </div>
+        </div>
+        <div class="col-12">
+          <form id="search-form" action="#" method="GET" th:action="@{/}" th:object="${searchCriteria}" class="search-form">
+            <div class="row">
+              <div class="col-lg-4 align-self-center">
+                <fieldset>
+                  <input  type="text" class="searchText" id="departureCity" th:field="*{departureCity}" placeholder="Ville de départ" required/>
+                </fieldset>
+              </div>
+              <div class="col-lg-4 align-self-center">
+                <fieldset>
+                  <input  type="text" id="arrivalCity" class="searchText" th:field="*{arrivalCity}" placeholder="Ville d'arrivée" required/>
+                </fieldset>
+              </div>
+              <div class="col-lg-4">
+                <fieldset>
+                  <button type="submit" class="main-button"> <i class="fa fa-search"></i> Rechercher</button>
+                </fieldset>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12" th:each="offer : ${navOffers}"
+           style="background-color: white; margin: 20px auto; border-radius: 12px; height: 200px; color: #00a082; text-align: center; display: flex; align-items: center; padding: 15px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+
+
+        <div class="col-sm-3 d-flex justify-content-center align-items-center">
+          <img th:src="@{${offer.company.ImagePath}}" width="150" style="padding: 5px; border-radius: 8px;">
+        </div>
+
+
+        <div class="col-sm-2 d-flex align-items-center justify-content-center">
+          <div style="font-family: EncodeSansExpanded Medium, sans-serif; font-size: 3.375rem; font-weight: bold;">
+            <span th:text="${offer.priceOffer} + ' MAD'"></span>
+          </div>
+        </div>
+
+
+        <div class="col-sm-2 text-center" style="padding: 20px;">
+          <p style="font-weight: bold;">Ville de départ</p>
+          <p style="font-size: 1.2rem;" th:text="${offer.departureCity}"></p>
+          <p style="font-family: EncodeSansExpanded Medium, sans-serif; font-size: 2rem; color: #333;">
+            <span th:text="${offer.departureTime}"></span>
+          </p>
+        </div>
+
+
+        <div class="col-sm-2 text-center" style="padding: 20px;">
+          <p style="font-weight: bold;">Ville d'arrivée</p>
+          <p style="font-size: 1.2rem;" th:text="${offer.arrivalCity}"></p>
+          <p style="font-family: EncodeSansExpanded Medium, sans-serif; font-size: 2rem; color: #333;">
+            <span th:text="${offer.arrivalTime}"></span>
+          </p>
+        </div>
+
+
+        <div class="col-sm-3 d-flex align-items-center justify-content-center">
+          <a th:href="@{/login}">
+            <button style="height: 50px; border-radius: 30px; font-size: large; background-color: #ffc244; border: none; padding: 10px 25px; font-weight: bold; color: #000; cursor: pointer; box-shadow: 2px 2px 10px rgba(0,0,0,0.2);">
+              <i class="fa fa-eye"></i> Abonner
+            </button>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+<!--  <footer style="text-align: center; position: fixed; bottom: 0; left: 0; right: 0; background-color: #343a40; color: #fff; padding: 15px 0;">-->
+<!--    <p>&copy; 2025 NavCar</p>-->
+<!--  </footer>-->
+
+
+
+  <!-- Scripts -->
+  <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/assets/js/owl-carousel.js}"></script>
+  <script th:src="@{/assets/js/animation.js}"></script>
+  <script th:src="@{/assets/js/imagesloaded.js}"></script>
+  <script th:src="@{/assets/js/custom.js}"></script>
+<script type="text/javascript">
+$(function (){
+  var source=["rabat","fes","casablanca","Marrakech" ,"Tangier","Agadir","Meknes","Oujda","Taza","Kenitra","El Jadida","Nador","Safi","Settat",]
+  $("#departureCity").autocomplete({
+    source:source
+  });
+  $("#arrivalCity ").autocomplete({
+    source:source
+  });
+})
+</script>
+</body>
+
+</html>

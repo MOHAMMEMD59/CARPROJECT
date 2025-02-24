@@ -1,15 +1,18 @@
 package com.mezzi.carsnav.Service;
 
-
-
 import com.mezzi.carsnav.Entity.NavOffer;
 import com.mezzi.carsnav.Entity.Subscription;
+import com.mezzi.carsnav.Entity.User;
 import com.mezzi.carsnav.Repository.NavOfferRepository;
 import com.mezzi.carsnav.Repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SubscriptionService {
@@ -20,32 +23,67 @@ public class SubscriptionService {
     @Autowired
     private NavOfferRepository navOfferRepository;
 
-    // Method to subscribe to an offer
-    public boolean subscribeToOffer(Long offerId, String subscriberName, String subscriberEmail) {
-        Optional<NavOffer> navOfferOpt = navOfferRepository.findById(offerId);
+    public String subscribeToOffer(Long offerId, String subscriberName, String subscriberEmail) {
+        NavOffer navOffer = navOfferRepository.getById(offerId);
+        if (navOffer!=null) {
 
-        if (navOfferOpt.isPresent()) {
-            NavOffer navOffer = navOfferOpt.get();
+            List<Subscription> res= subscriptionRepository.findByNavOfferAndSubscriberName(navOfferRepository.getById(offerId),subscriberName);
+            if(!res.isEmpty())
+                return  "you are already subscribed to this offer";
 
-            // Check if the offer has available seats
             if (navOffer.hasAvailableSeats()) {
                 Subscription subscription = new Subscription(navOffer, subscriberName, subscriberEmail);
-
-                // Save the subscription
                 subscriptionRepository.save(subscription);
-
-                // Increment the current subscribers count in the NavOffer
                 navOffer.incrementSubscribers();
-                //decrement available seats
                 navOffer.setAvailableSeats(navOffer.getAvailableSeats() - 1);
                 navOfferRepository.save(navOffer);
-
-                return true; // Subscription successful
+                return "offer added successfully";
             }
         }
 
-        return false; // No available seats or invalid offer
+        return "sets not available";
     }
 
-    // Optionally: Add more methods for deactivating, canceling, or querying subscriptions
+
+    public List<Subscription> getSubscriptionsByUser(String subscriberName) {
+
+        return subscriptionRepository.findBySubscriberName(subscriberName);
+    }
+
+    public SubscriptionService(SubscriptionRepository subscriptionRepository) {
+        this.subscriptionRepository = subscriptionRepository;
+    }
+
+    public Map<LocalDate, Long> getSubscriptionsByDate() {
+
+        List<Subscription> subscriptions = subscriptionRepository.findAll();
+
+
+        return subscriptions.stream()
+                .collect(Collectors.groupingBy(subscription -> subscription.getSubscriptionDate().toLocalDate(),
+                        Collectors.counting()));
+    }
+
+
+    public List<Subscription> getSubscriptionsByCompanyId(Long companyId) {
+        return subscriptionRepository.findByNavOfferCompanyId(companyId);
+    }
+
+
+    public void cancelSubscription(Long subscriptionId, User user) {
+        Subscription subscription = subscriptionRepository.findById(subscriptionId).orElse(null);
+
+        if (subscription != null && subscription.getSubscriberName().equals(user.getUsername())) {
+            NavOffer navOffer = subscription.getNavOffer();
+
+            if (navOffer != null) {
+                navOffer.setAvailableSeats(navOffer.getAvailableSeats() + 1);
+                navOffer.setCurrentSubscribers(navOffer.getCurrentSubscribers() - 1);
+                navOfferRepository.save(navOffer);
+            }
+
+            subscriptionRepository.deleteById(subscriptionId);
+        }
+    }
+
 }

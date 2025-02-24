@@ -22,11 +22,16 @@ public class LoginController {
         return "login";
     }
 
+
+
     @PostMapping("/login")
     public String loginUser(@RequestParam String username, @RequestParam String password, HttpSession session, Model model) {
+
         User user = userService.findByUsername(username);
+
         if (user != null && user.getPassword().equals(password)) {
             session.setAttribute("loggedInUser", user);
+            session.setAttribute("role", user.getRole());
             return "redirect:/dashboard";
         } else {
             model.addAttribute("error", "Invalid username or password");
