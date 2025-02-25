@@ -30,6 +30,19 @@ public class NavOfferController {
         return "offer-consultation";
     }
 
+    @GetMapping("/offer_consultation_company")
+    public String showAllRequestscompany(@RequestParam(defaultValue = "1") int page,
+                                  @RequestParam(defaultValue = "5") int size,
+                                  Model model) {
+        Page<NavOffer> requestPage = navOfferService.getAll(page, size);
+
+        model.addAttribute("nav_offer", requestPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", requestPage.getTotalPages());
+
+        return "offer_consultation_company";
+    }
+
     @GetMapping("/offer_consultation_admin")
     public String showAllRequests(@RequestParam(defaultValue = "1") int page,
                                   @RequestParam(defaultValue = "5") int size,

@@ -25,7 +25,7 @@ public class LoginMiddleware extends OncePerRequestFilter {
                 "/company-details", "/logout", "/unauthorized" ));
 
         roleAccessMap.put("admin_company", List.of("/admin_company_dashboard", "/dashboard", "/company-add-offer",
-                "/request_consultation", "/unauthorized", "/add-offer", "/cancel-request",
+                "/request_consultation", "/offer_consultation_company","/unauthorized", "/add-offer", "/cancel-request",
                 "/traiter-request", "/logout"));
 
         roleAccessMap.put("user", List.of("/user_dashboard", "/dashboard", "/offer-consultation",

@@ -118,7 +118,7 @@ public class RequestController {
             return "redirect:/login";
         }
         long userId = authenticatedUser.getId();
-        System.out.println("Authenticated User ID: " + userId);
+        //System.out.println("Authenticated User ID: " + userId);
         Page<Request> requestPage = requestService.getRequestsuser(userId, page, size);
         model.addAttribute("requests", requestPage.getContent());
         model.addAttribute("currentPage", page);

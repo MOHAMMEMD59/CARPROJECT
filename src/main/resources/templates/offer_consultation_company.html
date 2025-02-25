@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Consultation des demandes</title>
+    <title>Admin Dashboard</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- Font Awesome -->
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -11,7 +11,7 @@
             color: #fff;
             margin: 0;
             padding: 0;
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
         }
@@ -19,16 +19,51 @@
         .navbar {
             background-color: #343a40;
         }
-
         .navbar-brand, .nav-link {
             color: #fff !important;
         }
-
         .navbar-brand:hover, .nav-link:hover {
             color: #f8f9fa !important;
+            text-decoration: underline;
         }
 
-        .container {
+
+        .btn-primary:hover {
+            background-color: #0f5cff;
+            transform: scale(1.05);
+        }
+
+
+
+        main {
+            margin: 20px auto;
+            text-align: center;
+            max-width: 1000px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        p {
+            font-size: 1.2rem;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .status-closed {
+            color: red;
+            font-weight: bold;
+        }
+
+        .status-opened {
+            color: green;
+            font-weight: bold;
+        }
+
+            .container {
             margin-top: 5%;
             text-align: center;
         }
@@ -41,16 +76,6 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .table {
-            background-color: #fff;
-            color: #000;
-        }
-
-
-        .pagination {
-            justify-content: center;
-            margin-top: 20px;
-        }
     </style>
 </head>
 <body>
@@ -100,72 +125,70 @@
         </ul>
     </div>
 </nav>
+<main class="container">
 
-<div class="container">
-    <h1>Consultation des demandes</h1>
-    <div class="row mt-4">
-        <div class="col-md-8 offset-md-2">
-            <input type="text" id="searchInput" class="form-control" placeholder="Search by Departure, Arrival City, or User" onkeyup="filterTable()">
-        </div>
+    <h1>Liste des offres disponibles</h1>
+    <p>Consultez les offres de navettes disponibles ci-dessous et gérez-les</p>
+
+    <div class="search-bar">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search by any field..." onkeyup="searchTable()">
     </div>
     <div class="table-container">
-        <table class="table table-bordered text-center mt-4" id="requestsTable">
-            <thead class="thead-light">
-            <tr>
-                <th scope="col">Ville de depart</th>
-                <th scope="col">Ville d'arrive</th>
-                <th scope="col">Date de debut</th>
-                <th scope="col">Date fin</th>
-                <th scope="col">User</th>
-                <th scope="col" th:if="${session.loggedInUser.getRole()=='admin_company'}">Action</th>
-                <th scope="col" th:if="${session.loggedInUser.getRole()=='admin'}">Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="request, iterStat : ${requests}">
-                <td th:text="${request.departureCity}">City</td>
-                <td th:text="${request.arrivalCity}">City</td>
-                <td th:text="${request.startDate}">2025-01-01</td>
-                <td th:text="${request.endDate}">2025-01-10</td>
-                <td th:text="${request.user.username}">Username</td>
-                <td th:if="${session.loggedInUser.getRole()=='admin_company'}">
-                    <a th:href="@{|/cancel-request?requestId=${request.getRequestId()}|}">
-                        <button class="btn btn-danger traiter-button" >
-                            Annuler
-                        </button>
-                    </a>
-                    <a th:href="@{|/traiter-request?requestId=${request.getRequestId()}|}">
-                    <button class="btn btn-primary traiter-button" >
-                        Traiter
-                    </button>
-                    </a>
-                </td>
-                <td th:if="${session.loggedInUser.getRole() == 'admin'}"
-                    th:text="${request.isTraiter == 0 ? 'Encours' : (request.isTraiter == 1 ? 'Traiter' : 'Annuler')}">
-                </td>
+    <table class="table table-bordered">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col" text-align="center" >Société de Transport</th>
+            <th scope="col" text-align="center">Ville de départ</th>
+            <th scope="col" text-align="center">Ville d'arrivé</th>
+            <th scope="col" text-align="center">Date début</th>
+            <th scope="col" text-align="center">Date fin</th>
+            <th scope="col" text-align="center">Places disponibles</th>
+            <th scope="col" text-align="center">Nombre des abonnées actuel</th>
+            <th scope="col" text-align="center" width="20%" ;  >Prix de l'offre  ( MAD )</th>
+            <th scope="col" text-align="center">Status</th>
+        </tr>
+        </thead>
+        <tbody id="adminoffer">
 
-            </tr>
-            <tr th:if="${#lists.isEmpty(requests)}">
-                <td colspan="5">Aucune demande trouver</td>
-            </tr>
-            </tbody>
+        <tr th:each="offer : ${nav_offer}">
+            <td th:text="${offer.company.name}"></td>
+            <td th:text="${offer.departureCity}"></td>
+            <td th:text="${offer.arrivalCity}"></td>
+            <td th:text="${offer.startDate}"></td>
+            <td th:text="${offer.endDate}"></td>
+            <td th:text="${offer.availableSeats}"></td>
+            <td th:text="${offer.currentSubscribers}"></td>
+            <td th:text="${offer.priceOffer}"></td>
+            <td th:class="${offer.availableSeats == 0 or offer.endDate < T(java.time.LocalDate).now() ? 'status-closed' : 'status-opened'}"
+                th:text="${offer.availableSeats == 0 or offer.endDate < T(java.time.LocalDate).now() ? 'Closed' : 'Opened'}">
+            </td>
+        </tr>
 
-        </table>
+        <tr th:if="${#lists.isEmpty(nav_offer)}">
+            <td colspan="7" class="text-center">Aucun enregistrement trouvé</td>
+        </tr>
+
+        </tbody>
+
+    </table>
+        <!-- Pagination -->
         <nav>
             <ul class="pagination">
                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{|/request_consultation?page=${currentPage - 1}&size=10|}">&laquo; Previous</a>
+                    <a class="page-link" th:href="@{|/offer_consultation_company?page=${currentPage - 1}&size=5|}">&laquo; Previous</a>
                 </li>
                 <li class="page-item disabled">
                     <span class="page-link">Page <strong th:text="${currentPage}"></strong> of <strong th:text="${totalPages}"></strong></span>
                 </li>
                 <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                    <a class="page-link" th:href="@{|/request_consultation?page=${currentPage + 1}&size=10|}">Next &raquo;</a>
+                    <a class="page-link" th:href="@{|/offer_consultation_company?page=${currentPage + 1}&size=5|}">Next &raquo;</a>
                 </li>
             </ul>
         </nav>
     </div>
-</div>
+
+
+</main>
 
 <!--<footer style="text-align: center; position: fixed; bottom: 0; left: 0; right: 0; background-color: #343a40; color: #fff; padding: 15px 0;">-->
 <!--    <p>&copy; 2025 NavCar</p>-->
@@ -174,24 +197,28 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
-
-
 <script>
-    function filterTable() {
-        const searchInput = document.getElementById('searchInput').value.toLowerCase();
-        const rows = document.querySelectorAll('#requestsTable tbody tr');
-        rows.forEach(row => {
-            const cells = row.getElementsByTagName('td');
-            let match = false;
-            for (let i = 0; i < cells.length; i++) {
-                const cellText = cells[i].textContent || cells[i].innerText;
-                if (cellText.toLowerCase().includes(searchInput)) {
-                    match = true;
+    // Function to search the table based on user input
+    function searchTable() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toUpperCase();
+        const table = document.getElementById('adminoffer');
+        const rows = table.getElementsByTagName('tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            let found = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                const cell = cells[j];
+                if (cell && cell.textContent.toUpperCase().includes(filter)) {
+                    found = true;
                     break;
                 }
             }
-            row.style.display = match ? '' : 'none';
-        });
+
+            rows[i].style.display = found ? '' : 'none';
+        }
     }
 </script>
 
@@ -270,6 +297,7 @@
 
 
 </script>
+
 
 </body>
 </html>
